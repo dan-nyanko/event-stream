@@ -229,9 +229,12 @@ es.parse = function () {
     try {
       if(data) { //ignore empty lines
         if (data == '\r\n' || data == '\r') {
+          // exshovelrydr adds:
+          // twitter sends a carriage return as a keep alive message, emit
+          // this up the pipe.
           console.log('keep alive: data: %j', data);
+          data = {'keepalive': true};
         }
-        
         obj = JSON.parse(data.toString());
       }
     } catch (err) {
