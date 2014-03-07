@@ -228,7 +228,7 @@ es.parse = function () {
     var obj
     try {
       if(data) { //ignore empty lines
-        if (data == '\r\n' || data == '\r') {
+        if (data == '\r') {
           // exshovelrydr adds:
           // twitter sends a carriage return as a keep alive message, emit
           // this up the pipe.
