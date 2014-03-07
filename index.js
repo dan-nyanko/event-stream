@@ -227,8 +227,13 @@ es.parse = function () {
   return es.through(function (data) {
     var obj
     try {
-      if(data) //ignore empty lines
-        obj = JSON.parse(data.toString())
+      if(data) { //ignore empty lines
+        if (data == '\r\n' || data == '\r') {
+          console.log('keep alive: data: %j', data);
+        }
+        
+        obj = JSON.parse(data.toString());
+      }
     } catch (err) {
       return console.error(err, 'attemping to parse:', data)
     }
