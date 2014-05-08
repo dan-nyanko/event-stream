@@ -227,18 +227,15 @@ es.parse = function () {
   return es.through(function (data) {
     var obj
     try {
-      if(data) { //ignore empty lines
-        if (data == '\r') {
-          // exshovelrydr adds:
-          // twitter sends a carriage return as a keep alive message, emit
-          // this up the pipe.
-          console.log('keep alive: data: %j', data);
-          data = {'keepalive': true};
-        }
-        obj = JSON.parse(data.toString());
-      }
+      obj = JSON.parse(data.toString());
     } catch (err) {
-      return console.error(err, 'attemping to parse:', data)
+      if (err == 'SyntaxError: Unexpected end of input') {
+        obj = {'keepalive': true}; // exshovelrydr adds: twitter streaming API
+                                   // will periodically send empty strings to
+                                   // keep a connection from closing.
+      } else {
+        return console.error(err, 'attemping to parse:', data)
+      }
     }
     //ignore lines that where only whitespace.
     if(obj !== undefined)
